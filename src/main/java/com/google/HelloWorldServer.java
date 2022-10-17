@@ -1,13 +1,13 @@
 package com.google;
 
 
+import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.alts.AltsServerBuilder;
+import io.grpc.stub.StreamObserver;
 import services.hello.GreeterGrpc;
 import services.hello.HelloReply;
 import services.hello.HelloRequest;
-import io.grpc.Server;
-import io.grpc.stub.StreamObserver;
-import io.grpc.alts.AltsServerBuilder;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -27,60 +27,19 @@ public class HelloWorldServer {
         new HelloWorldServer().start(args);
     }
 
-    private void parseArgs(String[] args) {
-        boolean usage = false;
-        for (String arg : args) {
-            if (!arg.startsWith("--")) {
-                System.err.println("All arguments must start with '--': " + arg);
-                usage = true;
-                break;
-            }
-            String[] parts = arg.substring(2).split("=", 2);
-            String key = parts[0];
-            if ("help".equals(key)) {
-                usage = true;
-                break;
-            }
-            if (parts.length != 2) {
-                System.err.println("All arguments must be of the form --arg=value");
-                usage = true;
-                break;
-            }
-            String value = parts[1];
-            if ("port".equals(key)) {
-                port = Integer.parseInt(value);
-            } else {
-                System.err.println("Unknown argument: " + key);
-                usage = true;
-                break;
-            }
-        }
-        if (usage) {
-            HelloWorldServer s = new HelloWorldServer();
-            System.out.println(
-                    "Usage: [ARGS...]"
-                            + "\n"
-                            + "\n  --port=PORT           Server port to bind to. Default "
-                            + s.port);
-            System.exit(1);
-        }
-    }
-
     private void start(String[] args) throws IOException, InterruptedException {
         //parseArgs(args);
-        server = ServerBuilder.forPort(port)
+//        server = ServerBuilder.forPort(port)
 //            .useTransportSecurity(certChain, privateKey)
-                .addService(new GreeterImpl())
+//                .addService(new GreeterImpl())
 //                .addService(new PromotionServiceImpl(factory))
 //                .addService(new RewardServiceImpl(factory))
-                .build()
-                .start();
-//        server =
-//                AltsServerBuilder.forPort(port)
-//                        .addService(new GreeterImpl())
-//                        .executor(Executors.newFixedThreadPool(1))
-//                        .build();
-        server.start();
+//                .build()
+//                .start();
+        server = AltsServerBuilder.forPort(port)
+                        .addService(new GreeterImpl())
+                        .executor(Executors.newFixedThreadPool(1))
+                        .build().start();
         logger.log(Level.INFO, "Started on {0}", port);
         server.awaitTermination();
     }
