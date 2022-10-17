@@ -1,6 +1,7 @@
 package com.google;
 
 
+import io.grpc.ServerBuilder;
 import services.hello.GreeterGrpc;
 import services.hello.HelloReply;
 import services.hello.HelloRequest;
@@ -67,11 +68,18 @@ public class HelloWorldServer {
 
     private void start(String[] args) throws IOException, InterruptedException {
         //parseArgs(args);
-        server =
-                AltsServerBuilder.forPort(port)
-                        .addService(new GreeterImpl())
-                        .executor(Executors.newFixedThreadPool(1))
-                        .build();
+        server = ServerBuilder.forPort(port)
+//            .useTransportSecurity(certChain, privateKey)
+                .addService(new GreeterImpl())
+//                .addService(new PromotionServiceImpl(factory))
+//                .addService(new RewardServiceImpl(factory))
+                .build()
+                .start();
+//        server =
+//                AltsServerBuilder.forPort(port)
+//                        .addService(new GreeterImpl())
+//                        .executor(Executors.newFixedThreadPool(1))
+//                        .build();
         server.start();
         logger.log(Level.INFO, "Started on {0}", port);
         server.awaitTermination();
