@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class HelloWorldServer {
     private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
     private Server server;
-    private int port = 8080;
+    private int port = 50051;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new HelloWorldServer().start(args);
@@ -68,12 +68,12 @@ public class HelloWorldServer {
     private void start(String[] args) throws IOException, InterruptedException {
         //parseArgs(args);
         server =
-                AltsServerBuilder.forPort(8080)
+                AltsServerBuilder.forPort(port)
                         .addService(new GreeterImpl())
                         .executor(Executors.newFixedThreadPool(1))
                         .build();
         server.start();
-        logger.log(Level.INFO, "Started on {0}", 8080);
+        logger.log(Level.INFO, "Started on {0}", port);
         server.awaitTermination();
     }
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
