@@ -66,14 +66,14 @@ public class HelloWorldServer {
     }
 
     private void start(String[] args) throws IOException, InterruptedException {
-        parseArgs(args);
+        //parseArgs(args);
         server =
-                AltsServerBuilder.forPort(port)
+                AltsServerBuilder.forPort(8080)
                         .addService(new GreeterImpl())
                         .executor(Executors.newFixedThreadPool(1))
                         .build();
         server.start();
-        logger.log(Level.INFO, "Started on {0}", port);
+        logger.log(Level.INFO, "Started on {0}", 8080);
         server.awaitTermination();
     }
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
