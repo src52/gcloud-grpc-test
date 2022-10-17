@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class HelloWorldServer {
     private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
     private Server server;
-    private int port = 50051;
+    private int port = 8080;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new HelloWorldServer().start(args);
